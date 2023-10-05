@@ -98,8 +98,12 @@ userSchema.statics.updatePawn = async function (
   try {
     await this.findOneAndUpdate(
       { username: username },
-      { $set: { userPawnPos: userPawnPos, opponentPawnPos: botPawnPos } }
+      { userPawnPos: userPawnPos, opponentPawnPos: botPawnPos }
     );
+
+    if (!user) {
+      throw Error("Game progress lost");
+    }
   } catch (err) {
     throw Error("Game progress lost");
   }

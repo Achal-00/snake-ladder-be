@@ -14,10 +14,10 @@ const updateWinCount = async (req, res) => {
 
 // update pawn position
 const updatePawns = async (req, res) => {
-  const { username, userPawnPos, botPawnPos } = req.body;
+  const { username, playerOneScore, playerTwoScore } = req.body;
 
   try {
-    await User.updatePawn(username, userPawnPos, botPawnPos);
+    await User.updatePawn(username, playerOneScore, playerTwoScore);
     res.status(200).json({ success: "Game progress saved" });
   } catch (err) {
     res.status(400).json({ error: err.message });
