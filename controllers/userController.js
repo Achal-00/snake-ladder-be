@@ -12,9 +12,15 @@ const loginUser = async (req, res) => {
   try {
     const user = await User.login(username, password);
 
+    const Username = user.username;
+    const userPawnPos = user.userPawnPos;
+    const opponentPawnPos = user.opponentPawnPos;
+    const wins = user.wins;
     const token = createToken(user._id);
 
-    res.status(200).json({ username, token });
+    res
+      .status(200)
+      .json({ Username, userPawnPos, opponentPawnPos, wins, token });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -27,9 +33,15 @@ const signupUser = async (req, res) => {
   try {
     const user = await User.signup(username, password);
 
+    const Username = user.username;
+    const userPawnPos = user.userPawnPos;
+    const opponentPawnPos = user.opponentPawnPos;
+    const wins = user.wins;
     const token = createToken(user._id);
 
-    res.status(200).json({ username, token });
+    res
+      .status(200)
+      .json({ Username, userPawnPos, opponentPawnPos, wins, token });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

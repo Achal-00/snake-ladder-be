@@ -11,6 +11,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userPawnPos: {
+    type: Number,
+  },
+  opponentPawnPos: {
+    type: Number,
+  },
+  wins: {
+    type: Number,
+  },
 });
 
 userSchema.statics.signup = async function (username, password) {
@@ -35,7 +44,13 @@ userSchema.statics.signup = async function (username, password) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({ username, password: hash });
+  const user = await this.create({
+    username,
+    password: hash,
+    userPawnPos: 1,
+    opponentPawnPos: 1,
+    wins: 0,
+  });
 
   return user;
 };
@@ -58,6 +73,36 @@ userSchema.statics.login = async function (username, password) {
   }
 
   return user;
+};
+
+userSchema.statics.updateWin = async function (username, winCount) {
+  try {
+    const user = await this.findOneAndUpdate(
+      { username: username },
+      { wins: winCount }
+    );
+
+    if (!user) {
+      throw Error("Game progress lost");
+    }
+  } catch (err) {
+    throw Error("Game progress lost");
+  }
+};
+
+userSchema.statics.updatePawn = async function (
+  username,
+  userPawnPos,
+  botPawnPos
+) {
+  try {
+    await this.findOneAndUpdate(
+      { username: username },
+      { $set: { userPawnPos: userPawnPos, opponentPawnPos: botPawnPos } }
+    );
+  } catch (err) {
+    throw Error("Game progress lost");
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);
