@@ -109,4 +109,17 @@ userSchema.statics.updatePawn = async function (
   }
 };
 
+userSchema.statics.getLeaderboard = async function () {
+  const response = await this.find({})
+    .sort({ wins: -1 })
+    .limit(10)
+    .select("username wins");
+
+  if (!response) {
+    throw Error("Unable to fetch leaderboard");
+  }
+
+  return response;
+};
+
 module.exports = mongoose.model("User", userSchema);
