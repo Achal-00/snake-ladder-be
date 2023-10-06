@@ -1,11 +1,20 @@
 require("dotenv").config();
 
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
 const gameRoutes = require("./routes/gameData");
 
 const app = express();
+
+app.use(
+  cors({
+    origin: ["https://snake-and-ladder-sable.vercel.app"],
+    method: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
